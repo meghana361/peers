@@ -3,6 +3,7 @@
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 // dotenv.config({path:path.resolve(__dirname,"../../.env")})
+import path from "path"
 import express from "express";
 import dotenv from "dotenv"
 import mongoose from "mongoose";
@@ -15,7 +16,9 @@ import messageRoutes from "./routes/messageRoutes.js";
 import {v2 as cloudinary} from 'cloudinary'
 const app=express()
 dotenv.config()
+connectDB()
 const PORT=process.env.PORT || 5000
+const __dirname=path.resolve()
 app.use(express.json({limit:'15mb'}))
 app.use(express.urlencoded({limit:'10mb',extended:true})) //to parse form data into req.body (nested objects also parsed since it is true)
 app.use(cookieParser())
@@ -27,7 +30,12 @@ cloudinary.config({
 app.use('/api/users',userRoutes);
 app.use('/api/posts',postRoutes)
 app.use("/api/messages", messageRoutes);
-connectDB()
+if(process.env.NODE_ENV==="production"){
+    app.use(express.static(path.join(__dirname,"/frontend/dist")))
+    app.get("*",(req,res)=>{
+        res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"))
+    })
+}
 app.listen(PORT,()=>{
     console.log(`server running on port http://localhost:${PORT}`);
     
