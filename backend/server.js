@@ -10,7 +10,8 @@ import { v2 as cloudinary } from "cloudinary";
 import { app, server } from "./socket/socket.js";
 // import job from "./cron/cron.js";
 
-dotenv.config({ path: './backend/.env' }); 
+// dotenv.config({ path: './backend/.env' }); 
+dotenv.config()
 
 connectDB();
 // job.start();
@@ -19,9 +20,9 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
+	cloud_name: process.env.cloudinary_cloudname,
+	api_key: process.env.cloudinary_api_key,
+	api_secret: process.env.cloudinary_api_secret,
 });
 
 // Middlewares
